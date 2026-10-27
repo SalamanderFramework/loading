@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Salamander</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="bg"></div>
+<main id="wrap">
+  <header class="glass" id="head">
+    <div class="brand">SALAMANDER</div>
+    <div class="sub" id="servername">&nbsp;</div>
+    <dl id="meta">
+      <div><dt data-i18n="map">Carte</dt><dd id="map">-</dd></div>
+      <div><dt data-i18n="gamemode">Mode de jeu</dt><dd id="gamemode">-</dd></div>
+      <div><dt data-i18n="slots">Slots</dt><dd id="maxplayers">-</dd></div>
+    </dl>
+  </header>
+
+  <section class="glass" id="tipsbox">
+    <h2 data-i18n="tipsTitle">Conseils</h2>
+    <!-- Tips: edit the TIPS dictionary in loading.js (STAFF EDIT HERE) -->
+    <p id="tip"></p>
+  </section>
+
+  <!-- Mini-games are mounted here by minigames.js (self-playing demo, no input needed) -->
+  <section class="glass" id="minigames" aria-label="mini-games"></section>
+
+  <footer class="glass" id="foot">
+    <div class="row"><span id="status">...</span><span id="count"></span></div>
+    <div id="bar"><div id="fill"></div></div>
+    <div id="file"></div>
+  </footer>
+</main>
+<script src="loading.js"></script>
+<script src="minigames.js"></script>
+</body>
+</html>

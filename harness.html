@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Loading harness</title>
+<style>body{margin:0;background:#111;color:#eee;font:13px sans-serif}
+#ctl{padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+iframe{width:100%;height:calc(100vh - 44px);border:0}button,select{padding:4px 8px}</style></head>
+<body>
+<div id="ctl">
+  <label>Language <select id="lang"><option value="fr">fr</option><option value="en">en</option><option value="de">de (fallback)</option></select></label>
+  <button id="run">Run simulation (40 files)</button>
+  <button id="nodetails">No totals (status only)</button>
+  <button id="order">Odd order / invalid values</button>
+  <span id="log"></span>
+</div>
+<iframe id="f" src="index.html"></iframe>
+<script>
+var f = document.getElementById("f"), timer, log = document.getElementById("log");
+function W() { return f.contentWindow; }
+function stop() { clearInterval(timer); }
+function details() {
+  W().GameDetails("Salamander | Foundation RP", "https://example.org", "gm_site19_v2", 64,
+    "76561198000000000", "salamander", 1, document.getElementById("lang").value);
+}
+document.getElementById("lang").onchange = details;
+document.getElementById("run").onclick = function () {
+  stop(); var w = W(); w.SalamanderLoading.reset(); details();
+  var total = 40, left = total, i = 0;
+  w.SetStatusChanged("Retrieving server info...");
+  w.SetFilesTotal(total); w.SetFilesNeeded(total);
+  timer = setInterval(function () {
+    if (left > 0) {
+      left--; i++;
+      w.DownloadingFile("maps/gm_site19_v2/content_" + i + ".vtf");
+      w.SetFilesNeeded(left);
+      w.SetStatusChanged("Downloading " + i + "/" + total);
+      log.textContent = "needed=" + left;
+    } else { w.SetStatusChanged("Sending client info..."); w.DownloadingFile(""); stop(); }
+  }, 150);
+};
+document.getElementById("nodetails").onclick = function () {
+  stop(); W().SalamanderLoading.reset(); details();
+  W().SetStatusChanged("Workshop: mounting addons...");
+  W().DownloadingFile("models/props/crate.mdl");
+};
+document.getElementById("order").onclick = function () {
+  stop(); var w = W(); w.SalamanderLoading.reset();
+  w.SetFilesNeeded(5); w.DownloadingFile("x.lua"); w.SetFilesTotal(10); w.SetStatusChanged("odd order");
+  w.SetFilesTotal(undefined); w.SetFilesNeeded(null); w.DownloadingFile(null); w.SetStatusChanged(undefined);
+  w.GameDetails();
+  log.textContent = "no exception";
+};
+f.onload = details;
+</script></body></html>
